@@ -19,9 +19,26 @@ int main() {
 			
 			break;
 	}
-	
+	// Declare  file pointer
+    FILE *file;
+
+    // Open file in writing mode ("w")
+    file = fopen("daftar_mobil.txt", "w");
+
+    // Write cars
+    fprintf(file, "mobil 1.\n");
+    fprintf(file, "available.\n");
+    fprintf(file, "mobil 2.\n");
+    fprintf(file, "available.\n");
+    
+    //display all available options and ask for which car
+     
+    printf("which car would you like to rent?");
+    scanf()
+
 	return(0);
 }
+
 
 
 
