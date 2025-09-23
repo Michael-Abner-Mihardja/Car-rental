@@ -7,7 +7,7 @@ int main() {
 	FILE *fptr;
 	fptr = fopen("Car_rental.txt", "a");
 	
-	switch (option) {
+	switch (option) { //
 		case 1: //list car
 			listCar();
 			break;
@@ -22,5 +22,6 @@ int main() {
 	
 	return(0);
 }
+
 
 
