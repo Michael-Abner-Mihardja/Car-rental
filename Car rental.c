@@ -29,42 +29,42 @@ choice = 0;
 
 
 
-// int main() {
-// 	//declare file pointer
-// 	FILE *fptr;
-// 	fptr = fopen("Car_rental.txt", "w"); //open file in writing mode ("w")
-// 	fprintf//list car
+void file() {        // ini gw ganti namanya dari "int main" jadi "void file"
+ 	//declare file pointer
+	FILE *fptr;
+ 	fptr = fopen("Car_rental.txt", "w"); //open file in writing mode ("w")
+ 	fprintf//list car
 
-// 	int option;
+	int option;
 	
 		
-// 	do {
-// 		listAction()
-// 		switch (option) { //
-// 		case 1: //list car
+ 	do {
+		listAction()
+ 		switch (option) { //
+ 		case 1: //list car
 			
-// 			break;
-// 		case 2: //rent car
+ 			break;
+ 		case 2: //rent car
 			
-// 			break;
-// 		case 3: //return car
+ 			break;
+ 		case 3: //return car
 			
-// 			break;
-// 		case 4: //quit program
-// 			printf("Exiting\n")
-// 			break;
-// 		}
-// 	}
-// 		while (option != 4);
-// 	return(0);
-// }
+ 			break;
+ 		case 4: //quit program
+ 			printf("Exiting\n")
+ 			break;
+ 		}
+ 	}
+ 		while (option != 4);
+ 	return(0);
+ }
 
-// void listCar() {
-// 	fptr = fopen("Car_rental.txt", "r");//read file
-// 	char listCar[1000];
-// 	fgets(listCar, 1000, fptr);
-// 	printf("%s", listCar);
-// }
+ void listCar() {
+ 	fptr = fopen("Car_rental.txt", "r");//read file
+ 	char listCar[1000];
+ 	fgets(listCar, 1000, fptr);
+ 	printf("%s", listCar);
+ }
 
 
 
@@ -84,5 +84,6 @@ choice = 0;
      
 //     printf("which car would you like to rent?");
 //     scanf()
+
 
 
