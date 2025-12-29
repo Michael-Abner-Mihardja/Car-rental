@@ -20,7 +20,11 @@ printf("4. exit\n");
 printf("====================\n");
 printf("enter your choice: ");
 
-
+// ini potongan kode biar klo ada input salah gaakan ganggu program
+if (scanf("%d", &choice) != 1) {
+while (getchar() != '\n');
+choice = 0;
+}  
 
 
 
@@ -80,4 +84,5 @@ printf("enter your choice: ");
      
 //     printf("which car would you like to rent?");
 //     scanf()
+
 
