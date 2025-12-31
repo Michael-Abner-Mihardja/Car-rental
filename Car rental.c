@@ -46,6 +46,24 @@ void clearscreen(){
 }
 
 void login() {
+	char userName [50];
+	char passWord [50];
+
+	printf("===== LOGIN =====\n");
+	printf("enter your username: ");
+	scanf("%s\n", &userName);
+	printf("enter the password: ");
+	scanf("%s\n", &passWord);
+
+	// ini username ama passwordnya masih di set admin dan 123
+	if (strcmp(userName, "admin") == 0 && strcmp (passWord, ("123") == 0) {
+	isLogin = 1;
+	printf("welcome %s", userName);
+	}
+	else {
+	printf("authorization failed, please try again later");
+	}
+
 
 
 
@@ -105,6 +123,7 @@ void file() {        // ini gw ganti namanya dari "int main" jadi "void file"
      
 //     printf("which car would you like to rent?");
 //     scanf()
+
 
 
 
