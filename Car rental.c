@@ -2,12 +2,26 @@
 #include<stdlib.h>
 #include<string.h>
 
+struct Car {
+    char name[20];
+    int price;
+    int available; // 1 = tersedia, 0 = disewa
+};
+
+// prototype
+void mainmenu();
+void login();
+void rentcar();
+void returncar();
+void clearscreen();
+
+// bagian main menu
 int main (){
 	main menu ();
 return 0;
 }
 
-void main menu (){
+void mainmenu (){
 	int choice;
 do {
 clearScreen();
@@ -25,6 +39,13 @@ if (scanf("%d", &choice) != 1) {
 while (getchar() != '\n');
 choice = 0;
 }  
+
+// fungsi clearscreen
+void clearscreen(){
+	system ("cls");
+}
+
+void login() {
 
 
 
@@ -84,6 +105,7 @@ void file() {        // ini gw ganti namanya dari "int main" jadi "void file"
      
 //     printf("which car would you like to rent?");
 //     scanf()
+
 
 
 
