@@ -102,6 +102,64 @@ getchar();
 }
 
 // rent car system
+void rentCar() {
+	int brandChoice, carChoice, Duration;
+	if(!isLogin) {
+		printf("Please login first.\n");
+		return;
+	} 
+clearScreen();
+printf("===== Brand Selection =====\n");
+for (int i = 0 ; i < 3 ; i++){
+	printf("%d. %s\n", i + 1, brands[i].brandName);
+}
+
+printf("Choose The Car Brand: ");
+scanf("%s", &brandChoice);
+
+if(brandChoice < 1 || brandChoice > 3) {
+	printf("Sorry, that brand is not on the list.\n");
+return;
+}
+
+clearscreen();
+printf("===== Select The Car Type (%s) =====\n), brands[brandChoice - 1].brandName);
+
+	for (int i = 0 ; i < 3 ; i++) {
+		printf("%d. %s - Rp.%d - %s\n", i + 1, 
+			   brands[brandChoice - 1].cars[i].typeName,
+               brands[brandChoice - 1].cars[i].price,
+               brands[brandChoice - 1].cars[i].available ? "Available" : "Rented");
+    }
+printf("Choose the Car Type You Want To Rent: ");
+scanf("%d", &carChoice);
+
+if (carChoice < 1 || > 3) {
+printf("The car type is not on the list\n");
+}
+
+ if (brands[brandChoice - 1].cars[carChoice - 1].available == 0) {
+        printf("Car already rented!\n");
+        return;
+    }
+printf("How long do you want to rent this car?: ");
+scanf("%d", &duration);
+
+ brands[brandChoice - 1].cars[carChoice - 1].available = 0;
+
+    printf("\nCar rented successfully!\n");
+    printf("Brand : %s\n", brands[brandChoice - 1].brandName);
+    printf("Type  : %s\n", brands[brandChoice - 1].cars[carChoice - 1].typeName);
+    printf("Total : Rp%d\n",
+           brands[brandChoice - 1].cars[carChoice - 1].price * duration);
+}
+	
+
+
+
+
+
+
 		
 
 
@@ -182,6 +240,7 @@ void file() {        // ini gw ganti namanya dari "int main" jadi "void file"
      
 //     printf("which car would you like to rent?");
 //     scanf()
+
 
 
 
