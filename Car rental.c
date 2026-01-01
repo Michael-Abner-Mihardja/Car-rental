@@ -2,11 +2,49 @@
 #include<stdlib.h>
 #include<string.h>
 
-struct Car {
-    char name[20];
+// struct Car {
+//     char name[20];
+//     int price;
+//     int available; // 1 = tersedia, 0 = disewa
+// };
+
+struct carType {
+	char typeName[20];
     int price;
-    int available; // 1 = tersedia, 0 = disewa
+    int available;
 };
+
+struct brand {
+char brandName[30];
+struct CarType cars [3];
+};
+
+struct Brand brands[3] = {
+{"Toyota",
+	{"Avanza", 300.000, 1 hari},
+	{"Rush", 400.000, 1 hari},
+	{"Kijang innova", 350.000, 1 hari}
+	}
+}, 
+{"Suzuki",
+	{"Ertiga", 280.000, 1 hari},
+	{"Karimun", 180.000, 1 hari},
+	{"APV", 250.000, 1 hari}
+	}
+},
+{"Daihatsu",
+	{"Xenia", 270.000, 1 hari},
+    {"Terios", 330.000, 1 hari},
+	{"Zebra", 100.000, 1 hari}
+}
+}
+};
+int isLogin = 0;
+
+// rent car system
+		
+
+
 
 // prototype
 void mainmenu();
@@ -123,6 +161,7 @@ void file() {        // ini gw ganti namanya dari "int main" jadi "void file"
      
 //     printf("which car would you like to rent?");
 //     scanf()
+
 
 
 
