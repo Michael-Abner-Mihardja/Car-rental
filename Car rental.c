@@ -2,49 +2,44 @@
 #include<stdlib.h>
 #include<string.h>
 
-// struct Car {
-//     char name[20];
-//     int price;
-//     int available; // 1 = tersedia, 0 = disewa
-// };
-
 struct carType {
 	char typeName[20];
     int price;
     int available;
 };
 
-struct brand {
+struct Brand {
 char brandName[30];
-struct CarType cars [3];
+struct carType cars[3];
 };
 
 struct Brand brands[3] = {
-{"Toyota",
-	{"Avanza", 300.000, 1 hari},
-	{"Rush", 400.000, 1 hari},
-	{"Kijang innova", 350.000, 1 hari}
-	}
-}, 
-{"Suzuki",
-	{"Ertiga", 280.000, 1 hari},
-	{"Karimun", 180.000, 1 hari},
-	{"APV", 250.000, 1 hari}
-	}
-},
-{"Daihatsu",
-	{"Xenia", 270.000, 1 hari},
-    {"Terios", 330.000, 1 hari},
-	{"Zebra", 100.000, 1 hari}
-}
-}
+    {
+        "Toyota",
+        {
+            {"Avanza", 300000, 1},
+            {"Rush", 400000, 1},
+            {"Innova", 350000, 1}
+        }
+    },
+    {
+        "Suzuki",
+        {
+            {"Ertiga", 280000, 1},
+            {"Karimun", 180000, 1},
+            {"APV", 250000, 1}
+        }
+    },
+    {
+        "Daihatsu",
+        {
+            {"Xenia", 270000, 1},
+            {"Terios", 330000, 1},
+            {"Zebra", 100000, 1}
+        }
+    }
 };
 int isLogin = 0;
-
-// rent car system
-		
-
-
 
 // prototype
 void mainmenu();
@@ -55,14 +50,19 @@ void clearscreen();
 
 // bagian main menu
 int main (){
-	main menu ();
+	mainmenu ();
 return 0;
+}
+
+// clearscreen
+void clearscreen(){
+	system ("cls");
 }
 
 void mainmenu (){
 	int choice;
 do {
-clearScreen();
+clearscreen();
 
 printf("===== CAR RENT =====\n");
 printf("1. login\n");
@@ -76,12 +76,34 @@ printf("enter your choice: ");
 if (scanf("%d", &choice) != 1) {
 while (getchar() != '\n');
 choice = 0;
-}  
+} 
 
-// fungsi clearscreen
-void clearscreen(){
-	system ("cls");
+switch(choice) {
+	case 1:
+		login();
+		break;
+//	case 2:
+//		rent car();
+//		break;
+//	case 3:
+//		return car();
+//		break;
+	case 4:
+		exit(0);
+	default: 
+		printf("Tidak ada di pilihan.\n");
 }
+
+printf("\nPress Enter");
+getchar(); 
+getchar();
+
+} while(1);
+}
+
+// rent car system
+		
+
 
 void login() {
 	char userName [50];
@@ -94,15 +116,14 @@ void login() {
 	scanf("%s\n", &passWord);
 
 	// ini username ama passwordnya masih di set admin dan 123
-	if (strcmp(userName, "admin") == 0 && strcmp (passWord, ("123") == 0) {
+	if (strcmp(userName, "admin") == 0 && strcmp (passWord, "123") == 0) {
 	isLogin = 1;
 	printf("welcome %s", userName);
 	}
 	else {
 	printf("authorization failed, please try again later");
 	}
-
-
+}
 
 
 
@@ -161,6 +182,7 @@ void file() {        // ini gw ganti namanya dari "int main" jadi "void file"
      
 //     printf("which car would you like to rent?");
 //     scanf()
+
 
 
 
