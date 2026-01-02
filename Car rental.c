@@ -155,8 +155,56 @@ scanf("%d", &duration);
 }
 	
 
+// Return car
+void returnCar() {
+    int brandChoice, carChoice;
 
+    if (!isLogin) {
+        printf("Please login first!\n");
+        return;
+    }
 
+    clearScreen();
+    printf("===== RETURN CAR =====\n");
+    for (int i = 0; i < 3; i++) {
+        printf("%d. %s\n", i + 1, brands[i].brandName);
+    }
+
+    printf("Choose brand: ");
+    scanf("%d", &brandChoice);
+
+    if (brandChoice < 1 || brandChoice > 3) {
+        printf("Invalid brand!\n");
+        return;
+    }
+
+clearScreen();
+    printf("===== CAR LIST (%s) =====\n",
+           brands[brandChoice - 1].brandName);
+
+    for (int i = 0; i < 3; i++) {
+        printf("%d. %s - %s\n",
+               i + 1,
+               brands[brandChoice - 1].cars[i].typeName,
+               brands[brandChoice - 1].cars[i].available ? "Available" : "Rented");
+    }
+
+    printf("What car do you want to return: ");
+    scanf("%d", &carChoice);
+
+    if (carChoice < 1 || carChoice > 3) {
+        printf("Invalid choice!\n");
+        return;
+    }
+
+    if (brands[brandChoice - 1].cars[carChoice - 1].available == 1) {
+        printf("This car is not rented!\n");
+        return;
+    }
+
+    brands[brandChoice - 1].cars[carChoice - 1].available = 1;
+    printf("The car has been returned.\n");
+}
 
 
 
@@ -240,6 +288,7 @@ void file() {        // ini gw ganti namanya dari "int main" jadi "void file"
      
 //     printf("which car would you like to rent?");
 //     scanf()
+
 
 
 
