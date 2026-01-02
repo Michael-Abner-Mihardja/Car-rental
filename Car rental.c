@@ -136,7 +136,7 @@ void login() {
     char passWord[50];
     char filepWord[50];
     
-    int nemu;
+    int nemu = 0;
 
     printf("===== LOGIN =====\n");
     printf("Username: ");
@@ -208,6 +208,7 @@ void adminmenu(){
 				return;
             default:
 				printf("Invalid choice!\n");
+				getchar();
         }
 
         printf("\nPress Enter...");
@@ -235,10 +236,11 @@ void seecar(){
 	    printf("| Type    : %10s ", list.typeName);
 	    printf("| Price   : %10d ", list.price);
 	    if(list.available == 1) printf("| Status  : Available ||\n");
-	    else printf("| Status   :    Rented ||\n");
+	    else printf("| Status   :   Rented ||\n");
 	    number++;
 	}
 	printf("=================================================================================================\n");
+	fclose(carList);
 	
 	getchar();
 }
@@ -263,7 +265,7 @@ void addcar(){
 	}
 
 	fprintf(carList, "%s;%s;%d;%d;-\n", tempN, temp.typeName, temp.price, 1);
-	
+
 	fclose(carList);
 	
 	printf("Car added !\n");
@@ -272,6 +274,7 @@ void addcar(){
     getchar();
 }
 
+//Function buat delete car data
 void deletecar(){
 	int found = 0;
 	char listbrand[20], deletebrand[20], deletetype[20], whoo[20];
@@ -345,6 +348,7 @@ void deletecar(){
     getchar();
 }
 
+//Menu login user
 void loginmenu(){
 	int choice;
     
@@ -406,16 +410,23 @@ void rentCar() {
 			printf("||%2d.| Brand   : %10s ", number, tempbrand);
 		    printf("| Type    : %10s ", userLog.typeName);
 		    printf("| Price   : %10d ||\n", userLog.price);
+	    	number++;
 		}
-	    number++;
 	}
 	printf("============================================================================\n");
 	
-	printf("Input which car to rent (1 - %d) : ", number);
-	scanf("%d", &carChoice);
+	printf("Input which car to rent (1 - %d) : ", number-1);
+	if (scanf("%d", &carChoice) != 1) {
+		while (getchar() != '\n');
+		printf("Invalid input.\n");
+		fclose(carList);
+		return;
+	}
 	
-    if (carChoice < 1 || carChoice > number) {
+    if (carChoice < 1 || carChoice > number-1) {
+    	fclose(carList);
         printf("Invalid car choice!\n");
+        getchar();
         return;
     }
 
@@ -428,17 +439,21 @@ void rentCar() {
 	int count = 1;
 	while(fscanf(carList, " %[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF){		//Scan satu satu dari file
 		if(count ==  carChoice){
-			printf("Are you sure you want to rent %s %s for %d (Y/N)? ", userLog.price*duration);
-			scanf("%c", &yesnt);
-			if(toupper(yesnt) != 'Y' || toupper(yesnt != 'N')){
-				return;
-			}
+			printf("Are you sure you want to rent %s %s for %d (Y/N)? ", tempbrand, userLog.typeName, userLog.price*duration);
+			scanf(" %c", &yesnt);
 			break;
 		}
 		else{
-			count++;
+			if(userLog.available == 1)count++;
 		}
 	}
+	if(tolower(yesnt) == 'n'){
+		fclose(carList);
+		printf("Rent failed.");
+		getchar();
+		return;
+	}
+	
 	rewind(carList);
 	
 	
@@ -454,10 +469,10 @@ void rentCar() {
     count = 1;
 	while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
         if (count == carChoice) {
-            fprintf(assign, "%s;%s;%d;%d;$s\n", tempbrand, userLog.typeName, userLog.price, userLog.available, userNow);
+            fprintf(assign, "%s;%s;%d;0;%s\n", tempbrand, userLog.typeName, userLog.price, userNow);
         }
 		else {
-            fprintf(assign, "%s;%s;%d;%d;$s\n", tempbrand, userLog.typeName, userLog.price, userLog.available, whooo);
+            fprintf(assign, "%s;%s;%d;%d;%s\n", tempbrand, userLog.typeName, userLog.price, userLog.available, whooo);
         }
         count++;
     }
@@ -484,9 +499,10 @@ void rentCar() {
 // return car function
 
 void returnCar() {
-    int number, count, carChoice;
+    int ada, number, count, carChoice;
     char tempbrand[20], whooo[20];
     struct carType userLog;
+    char targetbrand[20], targettype[20];
 	
 	carList = fopen("carList.txt", "r");
     if(carList == NULL){
@@ -494,25 +510,54 @@ void returnCar() {
 	    return;
 	}
 	
-	printf("================ CAR $s RENTED ================\n", userNow);
+	printf("================== CAR RENTED =================\n", userNow);
 	
-	number = 1;
+	number = 1, ada = 0;
 	while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
         if(strcmp(userNow, whooo) == 0) {
             printf("||%2d| Brand : %10s | Type : %10s ||\n", number, tempbrand, userLog.typeName);
+            ada = 1;
+        	number++;
         }
-        number++;
     }
     printf("===============================================\n");
+	if(ada == 0){
+		fclose(carList);
+		printf("No car rented.\n");
+		getchar();
+		return;
+	}
+	//Biar bisa baca dari awal lagi
 	rewind(carList);
 	
-	printf("Which car do you want to return (1 - %d) : ", number);
-	scanf("%d", carChoice);
+	printf("Which car do you want to return (1 - %d) : ", number-1);
+	if (scanf("%d", &carChoice) != 1) {
+		while (getchar() != '\n');
+		printf("Invalid input.\n");
+		fclose(carList);
+		return;
+	}
 	
-	if (carChoice < 1 || carChoice > number) {
-        printf("Invalid choice!\n");
+	if (carChoice < 1 || carChoice > number-1) {
+		printf("Invalid choice!\n");
+		fclose(carList);
+        getchar();
         return;
     }
+    
+    //Buat ngeset target yang dihapus
+    number = 0;
+    while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
+    	if(strcmp(userNow, whooo) == 0){
+			number++;
+		}
+        if(carChoice == number) {
+            strcpy(targetbrand, tempbrand);
+            strcpy(targettype, userLog.typeName);
+        	break;
+        }
+    }
+	rewind(carList);
 	
 	FILE *hapus;
 	hapus = fopen("hapus.txt", "w");
@@ -522,11 +567,11 @@ void returnCar() {
 	}
 	
 	while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
-		if (strcmp(whooo, userNow) == 0) {
-            fprintf(hapus, "%s;%s;%d;%d;-\n", tempbrand, userLog.typeName, userLog.price, userLog.available);
+		if (strcmp(targetbrand, tempbrand) == 0 && strcmp(targettype, userLog.typeName) == 0) {
+            fprintf(hapus, "%s;%s;%d;1;-\n", tempbrand, userLog.typeName, userLog.price);
         }
 		else {
-            fprintf(hapus, "%s;%s;%d;%d;$s\n", tempbrand, userLog.typeName, userLog.price, userLog.available, whooo);
+            fprintf(hapus, "%s;%s;%d;%d;%s\n", tempbrand, userLog.typeName, userLog.price, userLog.available, whooo);
         }
 	}
 	
