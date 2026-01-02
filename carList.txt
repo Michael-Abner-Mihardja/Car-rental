@@ -1,0 +1,9 @@
+Toyota;Avanza;300000;1;-
+Toyota;Rush;400000;1;-
+Toyota;Innova;350000;1;-
+Suzuki;Ertiga;280000;1;-
+Suzuki;Karimun;180000;1;-
+Suzuki;APV;250000;1;-
+Daihatsu;Xenia;270000;1;-
+Daihatsu;Terios;330000;1;-
+Daihatsu;Zebra;100000;1;-
