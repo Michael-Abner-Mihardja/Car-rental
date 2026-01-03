@@ -76,6 +76,7 @@ int main() {
     return 0;
 }
 
+//Function menu
 void mainmenu() {
     int choice;
 
@@ -113,6 +114,7 @@ void mainmenu() {
     } while (1);
 }
 
+//Function buat register user baru ke file
 void reg(){
 	char userName[50];
     char passWord[50];
@@ -133,6 +135,7 @@ void reg(){
 	fclose(userList);
 }
 
+//Function buat login user, login data dicek dari file
 void login() {
     char userName[50];
     char fileuName[50];
@@ -220,6 +223,7 @@ void adminmenu(){
     } while (1);
 }
 
+//Function buat ngasih liat list car di admin
 void seecar(){
 	system("cls");
 	char listbrand[20], whooo[20];
@@ -248,6 +252,7 @@ void seecar(){
 	getchar();
 }
 
+//Function buat nambah data car
 void addcar(){
 	struct carType temp;
 	char tempN[20];
@@ -459,7 +464,7 @@ void rentCar() {
 	    }
 	}
 	
-	// Apply sorting if requested (sortChoice 1-4)
+	// Buat ngelakuin sortingnya (sortChoice 1-4)
 	if(sortChoice >= 1 && sortChoice <= 4) {
 	    // Simple bubble sort for the available car indices
 	    for(int i = 0; i < availableCount - 1; i++) {
@@ -633,6 +638,7 @@ void returnCar() {
 	
 	printf("================== CAR RENTED =================\n", userNow);
 	
+	//Buat ngasih liat car apa yang user skrng rent
 	number = 1, ada = 0;
 	while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
         if(strcmp(userNow, whooo) == 0) {
@@ -666,7 +672,7 @@ void returnCar() {
         return;
     }
     
-    //Buat ngeset target yang dihapus
+    //Buat nge-set target yang dihapus
     number = 0;
     while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
     	if(strcmp(userNow, whooo) == 0){
@@ -687,6 +693,7 @@ void returnCar() {
 	    return;
 	}
 	
+	//Buat update file carList
 	while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
 		if (strcmp(targetbrand, tempbrand) == 0 && strcmp(targettype, userLog.typeName) == 0) {
             fprintf(hapus, "%s;%s;%d;1;-\n", tempbrand, userLog.typeName, userLog.price);
@@ -696,6 +703,7 @@ void returnCar() {
         }
 	}
 	
+	//Close file
 	fclose(carList);
     fclose(hapus);
 	
@@ -714,4 +722,3 @@ void returnCar() {
 	printf("Car has been returned successfully!\n");
 	getchar();
 }
-
