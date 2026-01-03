@@ -3,17 +3,20 @@
 #include <string.h>
 #include <ctype.h>
 
+// pendefinisian tipe mobil
 struct carType {
     char typeName[20];
     int price;
     int available; // 1 = available, 0 = rented
 };
 
+// pendefinisian brand mobil
 struct Brand {
     char brandName[30];
     struct carType cars[3];
 };
 
+// pendefinisian 3 brand mobil yang tersedia, beserta dengan tipe dan harga sewa per hari
 struct Brand brands[3] = {
     {"Toyota", {
         {"Avanza", 300000, 1},
@@ -388,13 +391,33 @@ void loginmenu(){
 
 // rent car function
 void rentCar() {
-    int number, carChoice, duration;
+    int number, carChoice, duration, sortChoice;
 	char tempbrand[20], whooo[20];
 	struct carType userLog;
 	char yesnt;
-	
+
 	system("cls");
     printf("Login successful !\n\n");
+	
+	// pilihan untuk sorting
+	printf("==== SORTING OPTIONS ====\n");
+	printf("1. Sort by Price (Low to High)\n");
+	printf("2. Sort by Price (High to Low)\n");
+	printf("3. Sort by Brand (A to Z)\n");
+	printf("4. Sort by Brand (Z to A)\n");
+	printf("5. No sorting (Original order)\n");
+	printf("==========================\n");
+	printf("Choose sorting option (1-5): ");
+	scanf("%d", &sortChoice);
+	getchar();
+	
+	if(sortChoice < 1 || sortChoice > 5) {
+		printf("Invalid choice. Using original order.\n");
+		sortChoice = 5;
+	}
+	
+	system("cls");
+	printf("Login successful !\n\n");
 	
 	printf("================================ CAR LIST ==================================\n");
 	
@@ -403,19 +426,96 @@ void rentCar() {
         printf("File not found.\n");
 	    return;
 	}
+
+	// mendeklarasikan semua barnd, tipe, dan harga moibl sebelum di sort
+	char brands[100][20];
+	char types[100][20];
+	int prices[100];
+	int availability[100];
+	char rentedBy[100][20];
+	int carCount = 0;
+	int availableCount = 0;
 	
-	number = 1;
-	while(fscanf(carList, " %[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF){		//Scan satu satu dari file
-		if(userLog.available == 1){
-			printf("||%2d.| Brand   : %10s ", number, tempbrand);
-		    printf("| Type    : %10s ", userLog.typeName);
-		    printf("| Price   : %10d ||\n", userLog.price);
-	    	number++;
-		}
+	// membaca carlist berdasarkan user input
+	while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", 
+	             brands[carCount], 
+	             types[carCount], 
+	             &prices[carCount], 
+	             &availability[carCount], 
+	             rentedBy[carCount]) != EOF) {
+	    if(availability[carCount] == 1) {
+	        availableCount++;
+	    }
+	    carCount++;
 	}
+	
+	// index mobil ato apalah
+	int availableIndices[100];
+	int availIndex = 0;
+	for(int i = 0; i < carCount; i++) {
+	    if(availability[i] == 1) {
+	        availableIndices[availIndex] = i;
+	        availIndex++;
+	    }
+	}
+	
+	// Apply sorting if requested (sortChoice 1-4)
+	if(sortChoice >= 1 && sortChoice <= 4) {
+	    // Simple bubble sort for the available car indices
+	    for(int i = 0; i < availableCount - 1; i++) {
+	        for(int j = 0; j < availableCount - i - 1; j++) {
+	            int idx1 = availableIndices[j];
+	            int idx2 = availableIndices[j+1];
+	            int shouldSwap = 0;
+	            
+	            switch(sortChoice) {
+	                case 1: // Price Low to High
+	                    shouldSwap = (prices[idx1] > prices[idx2]);
+	                    break;
+	                case 2: // Price High to Low
+	                    shouldSwap = (prices[idx1] < prices[idx2]);
+	                    break;
+	                case 3: // Brand A to Z
+	                    shouldSwap = (strcmp(brands[idx1], brands[idx2]) > 0);
+	                    break;
+	                case 4: // Brand Z to A
+	                    shouldSwap = (strcmp(brands[idx1], brands[idx2]) < 0);
+	                    break;
+	            }
+	            
+	            if(shouldSwap) {
+	                // Swap indices
+	                int temp = availableIndices[j];
+	                availableIndices[j] = availableIndices[j+1];
+	                availableIndices[j+1] = temp;
+	            }
+	        }
+	    }
+	}
+	
+	// nampilin semua mobil yang udh disort
+	number = 1;
+	for(int i = 0; i < availableCount; i++) {
+	    int idx = availableIndices[i];
+	    printf("||%2d.| Brand   : %10s ", number, brands[idx]);
+	    printf("| Type    : %10s ", types[idx]);
+	    printf("| Price   : %10d ||\n", prices[idx]);
+	    number++;
+	}
+	
 	printf("============================================================================\n");
 	
-	printf("Input which car to rent (1 - %d) : ", number-1);
+	// info sorting atau apalah
+	switch(sortChoice) {
+		case 1: printf("Sorted by: Price (Low to High)\n"); break;
+		case 2: printf("Sorted by: Price (High to Low)\n"); break;
+		case 3: printf("Sorted by: Brand (A to Z)\n"); break;
+		case 4: printf("Sorted by: Brand (Z to A)\n"); break;
+		case 5: printf("No sorting applied\n"); break;
+	}
+	printf("\n");
+	
+	printf("Input which car to rent (1 - %d) : ", availableCount);
 	if (scanf("%d", &carChoice) != 1) {
 		while (getchar() != '\n');
 		printf("Invalid input.\n");
@@ -423,7 +523,7 @@ void rentCar() {
 		return;
 	}
 	
-    if (carChoice < 1 || carChoice > number-1) {
+    if (carChoice < 1 || carChoice > availableCount) {
     	fclose(carList);
         printf("Invalid car choice!\n");
         getchar();
@@ -434,41 +534,62 @@ void rentCar() {
     scanf("%d", &duration);
     getchar();
 	
-	//Buat baca file dari awal lagi
+	// ngambil index moibl berdasarkan yang udh di sort
+	int chosenIndex = availableIndices[carChoice-1];
+	
+	// nyari posisi awal dari mobil di file
 	rewind(carList);
-	int count = 1;
-	while(fscanf(carList, " %[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF){		//Scan satu satu dari file
-		if(count ==  carChoice){
-			printf("Are you sure you want to rent %s %s for %d (Y/N)? ", tempbrand, userLog.typeName, userLog.price*duration);
-			scanf(" %c", &yesnt);
-			break;
-		}
-		else{
-			if(userLog.available == 1)count++;
-		}
+	int originalPosition = 0;
+	int filePosition = 0;
+	while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
+	    // Check if this is the chosen car (by comparing brand, type, and price)
+	    if(strcmp(tempbrand, brands[chosenIndex]) == 0 && 
+	       strcmp(userLog.typeName, types[chosenIndex]) == 0 &&
+	       userLog.price == prices[chosenIndex]) {
+	        originalPosition = filePosition;
+	        break;
+	    }
+	    filePosition++;
 	}
-	if(tolower(yesnt) == 'n'){
+	
+	// buka ulang file ato rewind buat nyari
+	rewind(carList);
+	int count = 0;
+	int foundInFile = 0;
+	while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
+	    if(count == originalPosition) {
+	        printf("Are you sure you want to rent %s %s for %d (Y/N)? ", tempbrand, userLog.typeName, userLog.price*duration);
+	        scanf(" %c", &yesnt);
+	        foundInFile = 1;
+	        break;
+	    }
+	    count++;
+	}
+	
+	if(!foundInFile || tolower(yesnt) == 'n'){
 		fclose(carList);
-		printf("Rent failed.");
+		if(!foundInFile) printf("Error: Car not found in file.\n");
+		else printf("Rent cancelled.\n");
 		getchar();
 		return;
 	}
 	
 	rewind(carList);
 	
-	
 	//Buat assign pengguna ke file
 	FILE *assign;
 	assign = fopen("assign.txt", "w");
 	if(assign == NULL){
         printf("File not found.\n");
+	    fclose(carList);
 	    return;
 	}
 	
 	//Buat search and replace data car mana yang di assign
-    count = 1;
+    count = 0;
+    rewind(carList);
 	while(fscanf(carList, "%[^;];%[^;];%d;%d;%s\n", tempbrand, userLog.typeName, &userLog.price, &userLog.available, whooo) != EOF) {
-        if (count == carChoice) {
+        if (count == originalPosition) {
             fprintf(assign, "%s;%s;%d;0;%s\n", tempbrand, userLog.typeName, userLog.price, userNow);
         }
 		else {
@@ -593,3 +714,4 @@ void returnCar() {
 	printf("Car has been returned successfully!\n");
 	getchar();
 }
+
