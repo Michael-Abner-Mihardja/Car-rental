@@ -19,3 +19,9 @@ Di mode admin, admin bisa :
 
 
 Untuk sorting hanya ada di login user dan bukan admin.
+
+Dalam file carList, formatnya adalah :
+Brand;tipe mobil; harga; status(1 = available, 0 = rented);user mana yang meminjam
+
+Untuk file userList, formatnya adalah :
+username;password
